@@ -1,6 +1,7 @@
 ﻿using DbAssignment.Contexts;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Linq.Expressions;
+
 
 namespace DbAssignment.Repositories;
 
@@ -22,7 +23,54 @@ internal class Repo<TEntity> where TEntity : class
             return entity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
-       
+        return null!;  
     }
+
+    public virtual TEntity GetOne(Expression<Func<TEntity, bool>> expression)
+    {
+        try
+        {
+            var result = _context.Set<TEntity>().FirstOrDefault(expression);
+            if (result != null) 
+            {
+                return result;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
+
+    public virtual IEnumerable<TEntity> GetAll()
+    {
+        try
+        {
+            var result = _context.Set<TEntity>().ToList();
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
+
+    public virtual TEntity Update(TEntity entity)
+    {
+        try
+        {
+            var entityUpdate = _context.Set<TEntity>().Find(entity);
+            if (entityUpdate != null)
+            {
+                entityUpdate = entity;
+                _context.Set<TEntity>().Update(entityUpdate);
+                _context.SaveChanges();
+
+                return entityUpdate;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
+
+
 }
