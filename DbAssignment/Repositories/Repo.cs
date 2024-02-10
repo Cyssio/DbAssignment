@@ -72,5 +72,20 @@ internal class Repo<TEntity> where TEntity : class
         return null!;
     }
 
+    public virtual bool Delete(Expression<Func<TEntity, bool>> expression)
+    {
+        try
+        {
+            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+            if (entity != null)
+            {
+                _context.Set<TEntity>().Remove(entity);
+                _context.SaveChanges();
 
+                return true;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
+    }
 }
