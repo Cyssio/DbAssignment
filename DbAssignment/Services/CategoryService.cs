@@ -1,7 +1,5 @@
 ﻿using DbAssignment.Entity;
 using DbAssignment.Repositories;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 
 namespace DbAssignment.Services;
 
@@ -24,7 +22,13 @@ internal class CategoryService
         return categoryEntity;
     }
 
-    public CategoryEntity GetCategoryByCategoryName(int id) 
+    public CategoryEntity GetCategoryByCategoryName(string categoryName)
+    {
+        var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
+        return categoryEntity;
+    }
+
+    public CategoryEntity GetCategoryByCategoryId(int id) 
     {
         var categoryEntity = _categoryRepo.GetOne(x => x.Id == id);
         return categoryEntity;
