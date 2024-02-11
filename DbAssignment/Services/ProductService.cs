@@ -7,17 +7,35 @@ namespace DbAssignment.Services;
 internal class ProductService
 {
     private readonly ProductRepo _productRepo;
-    private readonly CategoryService _categorySercive;
+    private readonly CategoryService _categoryService;
 
-    public ProductService(ProductRepo productRepo, CategoryService categorySercive)
+    public ProductService(ProductRepo productRepo, CategoryService categoryService)
     {
         _productRepo = productRepo;
-        _categorySercive = categorySercive;
+        _categoryService = categoryService;
     }
 
 
 
-    public ProductEntity CreateProduct();
+    public ProductEntity CreateProduct(string title, decimal price, string categoryName)
+    {
+        try
+        {
+            var categoryEntity = _categoryService.CreateCategory(categoryName);
+
+            var productEntity = new ProductEntity
+            {
+                Title = title,
+                Price = price,
+                CategoryId = categoryEntity.Id,
+            };
+
+            productEntity = _productRepo.Create(productEntity);
+            return productEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
 
     public ProductEntity GetProductById(int id)
     {
