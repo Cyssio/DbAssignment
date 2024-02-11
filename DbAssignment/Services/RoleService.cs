@@ -18,10 +18,10 @@ internal class RoleService
     {
         try
         {
-            var RoleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
-            RoleEntity ??= _roleRepo.Create(new RoleEntity { RoleName = roleName });
+            var roleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
+            roleEntity ??= _roleRepo.Create(new RoleEntity { RoleName = roleName });
 
-            return RoleEntity;
+            return roleEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -31,8 +31,8 @@ internal class RoleService
     {
         try
         {
-            var RoleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
-            return RoleEntity;
+            var roleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
+            return roleEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -42,8 +42,8 @@ internal class RoleService
     {
         try
         {
-            var RoleEntity = _roleRepo.GetOne(x => x.Id == id);
-            return RoleEntity;
+            var roleEntity = _roleRepo.GetOne(x => x.Id == id);
+            return roleEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -60,11 +60,11 @@ internal class RoleService
         return null!;
     }
 
-    public RoleEntity UpdateRole(RoleEntity RoleEntity)
+    public RoleEntity UpdateRole(RoleEntity roleEntity)
     {
         try
         {
-            var updatedRoleEntity = _roleRepo.Update(x => x.Id == RoleEntity.Id, RoleEntity);
+            var updatedRoleEntity = _roleRepo.Update(x => x.Id == roleEntity.Id, roleEntity);
             return updatedRoleEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }

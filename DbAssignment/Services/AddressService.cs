@@ -1,4 +1,5 @@
-﻿using DbAssignment.Entity;
+﻿using DbAssignment.Dtos;
+using DbAssignment.Entity;
 using DbAssignment.Repositories;
 using System.Diagnostics;
 
@@ -14,12 +15,12 @@ internal class AddressService
     }
 
 
-    public AddressEntity CreateAddress(string streetName, string postalCode, string city)
+    public AddressEntity CreateAddress(CreateAddressDto _createAddress)
     {
         try
         {
-            var addressEntity = _addressRepo.GetOne(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
-            addressEntity ??= _addressRepo.Create(new AddressEntity { StreetName = streetName, PostalCode = postalCode, City = city });
+            var addressEntity = _addressRepo.GetOne(x => x.StreetName == _createAddress.StreetName && x.PostalCode == _createAddress.PostalCode && x.City == _createAddress.City);
+            addressEntity ??= _addressRepo.Create(new AddressEntity { StreetName = _createAddress.StreetName, PostalCode = _createAddress.PostalCode, City = _createAddress.City });
 
             return addressEntity;
         } 
@@ -28,11 +29,11 @@ internal class AddressService
 
     }
 
-    public AddressEntity GetAddress(string streetName, string postalCode, string city)
+    public AddressEntity GetAddress(CreateAddressDto _getAddress)
     {
         try
         {
-            var addressEntity = _addressRepo.GetOne(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
+            var addressEntity = _addressRepo.GetOne(x => x.StreetName == _getAddress.StreetName && x.PostalCode == _getAddress.PostalCode && x.City == _getAddress.City);
             return addressEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }

@@ -1,4 +1,5 @@
-﻿using DbAssignment.Entity;
+﻿using DbAssignment.Dtos;
+using DbAssignment.Entity;
 using DbAssignment.Repositories;
 using System.Diagnostics;
 
@@ -17,16 +18,16 @@ internal class ProductService
 
 
 
-    public ProductEntity CreateProduct(string title, decimal price, string categoryName)
+    public ProductEntity CreateProduct(CreateProductDto _createProduct)
     {
         try
         {
-            var categoryEntity = _categoryService.CreateCategory(categoryName);
+            var categoryEntity = _categoryService.CreateCategory(_createProduct.CategoryName);
 
             var productEntity = new ProductEntity
             {
-                Title = title,
-                Price = price,
+                Title = _createProduct.Title,
+                Price = _createProduct.Price,
                 CategoryId = categoryEntity.Id,
             };
 
@@ -41,8 +42,8 @@ internal class ProductService
     {
         try
         {
-            var ProductEntity = _productRepo.GetOne(x => x.Id == id);
-            return ProductEntity;
+            var productEntity = _productRepo.GetOne(x => x.Id == id);
+            return productEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -60,11 +61,11 @@ internal class ProductService
 
     }
 
-    public ProductEntity UpdateProduct(ProductEntity ProductEntity)
+    public ProductEntity UpdateProduct(ProductEntity productEntity)
     {
         try
         {
-            var updatedProductEntity = _productRepo.Update(x => x.Id == ProductEntity.Id, ProductEntity);
+            var updatedProductEntity = _productRepo.Update(x => x.Id == productEntity.Id, productEntity);
             return updatedProductEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
