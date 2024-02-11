@@ -1,4 +1,5 @@
-﻿using DbAssignment.Entity;
+﻿using DbAssignment.Dtos;
+using DbAssignment.Entity;
 using DbAssignment.Repositories;
 using System.Diagnostics;
 
@@ -18,11 +19,32 @@ internal class CustomerService
     }
 
 
-    public CustomerEntity CreateCustomer(string firstName, string lastName, string email, string roleName, string streetName, string postalCode, string city)
+    public CustomerEntity CreateCustomer(CreateCustomerDto _createCustomer)
     {
         try
         {
+            var roleEntity = _roleService.CreateRole(_createCustomer.RoleName);
 
+            var addressDto = new CreateAddressDto
+            {
+                StreetName = _createCustomer.StreetName,
+                PostalCode = _createCustomer.PostalCode,
+                City = _createCustomer.City
+            };
+
+            var addressEntity = _addressService.CreateAddress(addressDto);
+
+            var customerEntity = new CustomerEntity
+            {
+                FirstName = _createCustomer.FirstName,
+                LastName = _createCustomer.LastName,
+                Email = _createCustomer.Email,
+                RoleId = roleEntity.Id,
+                AddressId = addressEntity.Id,
+            };
+
+            customerEntity = _customerRepo.Create(customerEntity);
+            return customerEntity;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
