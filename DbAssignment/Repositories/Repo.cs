@@ -55,19 +55,15 @@ internal class Repo<TEntity> where TEntity : class
         return null!;
     }
 
-    public virtual TEntity Update(TEntity entity)
+    public virtual TEntity Update(Expression<Func<TEntity, bool>> expression, TEntity entity)
     {
         try
         {
-            var entityUpdate = _context.Set<TEntity>().Find(entity);
-            if (entityUpdate != null)
-            {
-                entityUpdate = entity;
-                _context.Set<TEntity>().Update(entityUpdate);
-                _context.SaveChanges();
+            var entityUpdate = _context.Set<TEntity>().FirstOrDefault(expression);
+            _context.Entry(entityUpdate!).CurrentValues.SetValues(entity);
+            _context.SaveChanges();
 
-                return entityUpdate;
-            }
+            return entityUpdate!;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;

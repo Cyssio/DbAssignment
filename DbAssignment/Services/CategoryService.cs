@@ -1,6 +1,7 @@
 ﻿using DbAssignment.Entity;
 using DbAssignment.Repositories;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 
 namespace DbAssignment.Services;
 
@@ -17,20 +18,33 @@ internal class CategoryService
 
     public CategoryEntity CreateCategory(string categoryName)
     {
-        try
-        {
-            var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
-            categoryEntity ??= _categoryRepo.Create(new CategoryEntity { CategoryName = categoryName });
+        var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
+        categoryEntity ??= _categoryRepo.Create(new CategoryEntity { CategoryName = categoryName });
 
-            return categoryEntity;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+        return categoryEntity;
     }
 
-    public CategoryEntity GetCategoryByCategoryName(string categoryName) 
+    public CategoryEntity GetCategoryByCategoryName(int id) 
     {
-        var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
+        var categoryEntity = _categoryRepo.GetOne(x => x.Id == id);
         return categoryEntity;
+    }
+
+    public IEnumerable<CategoryEntity> GetAllCategories()
+    {
+        var categories = _categoryRepo.GetAll();
+        return categories;
+    }
+
+    public CategoryEntity UpdateCategory(CategoryEntity categoryEntity)
+    {
+        var updatedCategoryEntity = _categoryRepo.Update(x => x.Id == categoryEntity.Id, categoryEntity);
+        return updatedCategoryEntity;
+    }
+
+    public bool DeleteCategory(int id) 
+    {
+        _categoryRepo.Delete(x => x.Id == id);
+        return true;
     }
 }
