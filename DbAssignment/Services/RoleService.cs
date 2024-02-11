@@ -1,5 +1,6 @@
 ﻿using DbAssignment.Entity;
 using DbAssignment.Repositories;
+using System.Diagnostics;
 
 namespace DbAssignment.Services;
 
@@ -15,39 +16,69 @@ internal class RoleService
 
     public RoleEntity CreateRole(string roleName)
     {
-        var RoleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
-        RoleEntity ??= _roleRepo.Create(new RoleEntity { RoleName = roleName });
+        try
+        {
+            var RoleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
+            RoleEntity ??= _roleRepo.Create(new RoleEntity { RoleName = roleName });
 
-        return RoleEntity;
+            return RoleEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public RoleEntity GetRoleByRoleName(string roleName)
     {
-        var RoleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
-        return RoleEntity;
+        try
+        {
+            var RoleEntity = _roleRepo.GetOne(x => x.RoleName == roleName);
+            return RoleEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public RoleEntity GetRoleById(int id)
     {
-        var RoleEntity = _roleRepo.GetOne(x => x.Id == id);
-        return RoleEntity;
+        try
+        {
+            var RoleEntity = _roleRepo.GetOne(x => x.Id == id);
+            return RoleEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public IEnumerable<RoleEntity> GetAllRoles()
     {
-        var roles = _roleRepo.GetAll();
-        return roles;
+        try
+        {
+            var roles = _roleRepo.GetAll();
+            return roles;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public RoleEntity UpdateRole(RoleEntity RoleEntity)
     {
-        var updatedRoleEntity = _roleRepo.Update(x => x.Id == RoleEntity.Id, RoleEntity);
-        return updatedRoleEntity;
+        try
+        {
+            var updatedRoleEntity = _roleRepo.Update(x => x.Id == RoleEntity.Id, RoleEntity);
+            return updatedRoleEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public bool DeleteRole(int id)
     {
-        _roleRepo.Delete(x => x.Id == id);
-        return true;
+        try
+        {
+            _roleRepo.Delete(x => x.Id == id);
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 }

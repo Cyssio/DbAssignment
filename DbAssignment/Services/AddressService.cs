@@ -1,5 +1,6 @@
 ﻿using DbAssignment.Entity;
 using DbAssignment.Repositories;
+using System.Diagnostics;
 
 namespace DbAssignment.Services;
 
@@ -15,39 +16,71 @@ internal class AddressService
 
     public AddressEntity CreateAddress(string streetName, string postalCode, string city)
     {
-        var addressEntity = _addressRepo.GetOne(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
-        addressEntity ??= _addressRepo.Create(new AddressEntity { StreetName = streetName, PostalCode = postalCode, City = city });
+        try
+        {
+            var addressEntity = _addressRepo.GetOne(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
+            addressEntity ??= _addressRepo.Create(new AddressEntity { StreetName = streetName, PostalCode = postalCode, City = city });
 
-        return addressEntity;
+            return addressEntity;
+        } 
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+
     }
 
     public AddressEntity GetAddress(string streetName, string postalCode, string city)
     {
-        var addressEntity = _addressRepo.GetOne(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
-        return addressEntity;
+        try
+        {
+            var addressEntity = _addressRepo.GetOne(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
+            return addressEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public AddressEntity GetAddressByAddressId(int id)
     {
-        var addressEntity = _addressRepo.GetOne(x => x.Id == id);
-        return addressEntity;
+        try
+        {
+            var addressEntity = _addressRepo.GetOne(x => x.Id == id);
+            return addressEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public IEnumerable<AddressEntity> GetAllAddresses()
     {
-        var addresses = _addressRepo.GetAll();
-        return addresses;
+        try
+        {
+            var addresses = _addressRepo.GetAll();
+            return addresses;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+
     }
 
     public AddressEntity UpdateAddress(AddressEntity addressEntity)
     {
-        var updatedAddressEntity = _addressRepo.Update(x => x.Id == addressEntity.Id, addressEntity);
-        return updatedAddressEntity;
+        try
+        {
+            var updatedAddressEntity = _addressRepo.Update(x => x.Id == addressEntity.Id, addressEntity);
+            return updatedAddressEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public bool DeleteAddress(int id)
     {
-        _addressRepo.Delete(x => x.Id == id);
-        return true;
+        try
+        {
+            _addressRepo.Delete(x => x.Id == id);
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 }

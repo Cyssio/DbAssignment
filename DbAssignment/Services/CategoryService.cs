@@ -1,5 +1,6 @@
 ﻿using DbAssignment.Entity;
 using DbAssignment.Repositories;
+using System.Diagnostics;
 
 namespace DbAssignment.Services;
 
@@ -16,39 +17,71 @@ internal class CategoryService
 
     public CategoryEntity CreateCategory(string categoryName)
     {
-        var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
-        categoryEntity ??= _categoryRepo.Create(new CategoryEntity { CategoryName = categoryName });
+        try
+        {
+            var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
+            categoryEntity ??= _categoryRepo.Create(new CategoryEntity { CategoryName = categoryName });
 
-        return categoryEntity;
+            return categoryEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public CategoryEntity GetCategoryByCategoryName(string categoryName)
     {
-        var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
-        return categoryEntity;
+        try
+        {
+            var categoryEntity = _categoryRepo.GetOne(x => x.CategoryName == categoryName);
+            return categoryEntity;
+        } 
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+        
     }
 
     public CategoryEntity GetCategoryByCategoryId(int id) 
     {
-        var categoryEntity = _categoryRepo.GetOne(x => x.Id == id);
-        return categoryEntity;
+        try
+        {
+            var categoryEntity = _categoryRepo.GetOne(x => x.Id == id);
+            return categoryEntity;
+        } 
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+        
     }
 
     public IEnumerable<CategoryEntity> GetAllCategories()
     {
-        var categories = _categoryRepo.GetAll();
-        return categories;
+        try
+        {
+            var categories = _categoryRepo.GetAll();
+            return categories;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public CategoryEntity UpdateCategory(CategoryEntity categoryEntity)
     {
-        var updatedCategoryEntity = _categoryRepo.Update(x => x.Id == categoryEntity.Id, categoryEntity);
-        return updatedCategoryEntity;
+        try
+        {
+            var updatedCategoryEntity = _categoryRepo.Update(x => x.Id == categoryEntity.Id, categoryEntity);
+            return updatedCategoryEntity;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
 
     public bool DeleteCategory(int id) 
     {
-        _categoryRepo.Delete(x => x.Id == id);
-        return true;
+        try
+        {
+            _categoryRepo.Delete(x => x.Id == id);
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 }
